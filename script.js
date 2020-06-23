@@ -1,35 +1,33 @@
-class App {
-  constructor() {
-    this.loadBtn = document.querySelector(".section__btn");
-    this.loadBtn.addEventListener("click", this.loadCards);
-    this.divInfo = document.querySelector(".section__info");
-    this.h1 = document.querySelector(".section__title");
-    this.img = document.querySelector(".section__image");
-    this.p = document.querySelector(".section__additionalInfo");
-    this.API = "https://api.pokemontcg.io/v1/cards";
-    this.pokemons =[]
-  }
+const loadBtn = document.querySelector(".section__btn");
 
-  takeData = () => {
-    fetch(this.API)
-      .then((res) => res.json())
-      .then((data)=>this.pokemons.push(data))
-    
-  };
+const divInfo = document.querySelector(".section__info");
+const h1 = document.querySelector(".section__title");
+const img = document.querySelector(".section__image");
+const p = document.querySelector(".section__additionalInfo");
+const URL = "https://api.pokemontcg.io/v1/cards?page=1";
+let pokemons = null;
 
-  showData = () => {
-    const pokemons = [...this.pokemons]
-    const {id, name, hp, imageUrl} = pokemons[0].cards[0]
-    this.h1.textContent = `Nazwa: ${name}`;
-    this.img.src = `${imageUrl}`;
-    // this.p.textContent = `HP: ${hp}`
-    
+fetch(URL)
+  .then((res) => {
+    if (res.status !== 200) {
+      throw Error("I's not 200 response!");
+    } else {
+      return res.json();
+    }
+  })
 
-  };
-  loadCards = () => {
-    this.takeData();
-    this.showData();
-    
-  };
-}
-const app = new App();
+  .then((json) => (pokemons = json.cards))
+  .catch((err) => console.log(err));
+
+showData = () => {
+  pokemons.forEach((pokemon) => {
+    h1.textContent = `${pokemon.name}`;
+    img.src = `${pokemon.imageUrl}`;
+    p.textContent = `Nr: ${pokemon.number} Hp:${pokemon.hp} Dostępność${pokemon.rarity}`;
+  });
+};
+loadCards = () => {
+  showData();
+};
+
+loadBtn.addEventListener("click", loadCards);
