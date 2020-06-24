@@ -35,18 +35,14 @@
   display: flex;
   flex-wrap: wrap;
   width: 90%;
-  justify-content: space-around;
+  justify-content: space-between;
 }
 .section__info {
-  flex-basis: 100%;
-  min-height: 30vh;
+  flex-basis: 15%;
   margin: 20px;
 }
-.section__image{
-  width: 200px;
-  height: 350px
-}
-.section__btn {
+
+.container__btn {
   flex-basis: 20%;
   padding: 10px 20px;
   font-size: 18px;
@@ -54,7 +50,7 @@
   color: orangered;
   transition: 0.2s;
 }
-.section__btn:hover {
+.container__btn:hover {
   background-color: orangered;
   color: white;
 }
