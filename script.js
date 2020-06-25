@@ -1,5 +1,5 @@
 const loadBtn = document.querySelector(".container__btn");
-
+const divScreen = document.querySelector(".container__screen")
 const divSection = document.querySelector(".section");
 const URL = "https://api.pokemontcg.io/v1/cards?page=2&pageSize=4";
 let pokemons = null;
@@ -17,7 +17,15 @@ fetch(URL)
   .then((json) => (pokemons = json.cards))
   .catch((err) => console.log(err));
 
+  showScreen=()=>{
+   divScreen.classList.add("active")
+  }
+  removeScreen=()=>{
+    divScreen.classList.remove("active")
+  }
+
 showData = () => {
+
   pokemons.forEach((pokemon) => {
     const divInfo = document.createElement("div");
     divInfo.classList.add("section__info");
@@ -29,14 +37,16 @@ showData = () => {
     img.src = `${pokemon.imageUrl}`;
     const p = document.createElement("p");
     divInfo.appendChild(p);
-    p.textContent = `${pokemon.rarity}`;
+    p.textContent = `Rarity: ${pokemon.rarity}`;
     divSection.appendChild(divInfo);
     pokemonsName.push(pokemon.name);
   });
-  console.log(pokemonsName);
+  
 };
-loadCards = () => {
-  showData();
-};
+loadData=()=>{
+  showScreen();
+  setTimeout(removeScreen, 2000)
+  setTimeout(showData, 2000)
+}
 
-loadBtn.addEventListener("click", loadCards);
+loadBtn.addEventListener("click", loadData);
