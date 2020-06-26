@@ -47,6 +47,8 @@ loadData=()=>{
   showScreen();
   setTimeout(removeScreen, 2000)
   setTimeout(showData, 2000)
+  console.log(pokemonsName);
+  
 }
 
 loadBtn.addEventListener("click", loadData);
