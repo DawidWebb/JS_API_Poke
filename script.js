@@ -6,9 +6,12 @@ class App {
     this.divSection = document.querySelector(".section");
     this.aside = document.querySelector(".container__aside");
     this.input = document.querySelector(".head__serch-value");
-    this.input.addEventListener("input", this.serchValue);
+    this.input.addEventListener("search", this.serchValue);
     this.form = document.querySelector("form");
+    this.divSerch = document.createElement("div");
+
     this.URL = "https://api.pokemontcg.io/v1/cards?page=2&pageSize=4";
+
     this.pokemons = null;
     this.pokemonsName = [];
     this.takeData();
@@ -63,26 +66,27 @@ class App {
     this.showScreen();
     setTimeout(this.removeScreen, 2000);
     setTimeout(this.showData, 2000);
+    this.aside.removeChild(this.divSerch);
   };
 
   //INPUT VALUE//
   serchValue = (e) => {
     this.pokemonsName.filter((pokemon) => {
       if (e.target.value === pokemon.name) {
-        const divInfo = document.createElement("div");
-        divInfo.classList.add("section__info");
+        this.divSerch.classList.add("section__info");
         const h3 = document.createElement("h3");
-        divInfo.appendChild(h3);
+        this.divSerch.appendChild(h3);
         h3.textContent = `${pokemon.name}`;
         const img = document.createElement("img");
-        divInfo.appendChild(img);
+        this.divSerch.appendChild(img);
         img.src = `${pokemon.img}`;
         const p = document.createElement("p");
-        divInfo.appendChild(p);
+        this.divSerch.appendChild(p);
         p.textContent = `Rarity: ${pokemon.rarity}`;
-        this.aside.appendChild(divInfo);
+        this.aside.appendChild(this.divSerch);
       }
     });
+    return divSerch;
   };
 }
 
