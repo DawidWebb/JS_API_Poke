@@ -1,63 +1,43 @@
-const loadBtn = document.querySelector(".container__btn");
-const divScreen = document.querySelector(".container__screen");
-const divSection = document.querySelector(".section");
-const aside = document.querySelector(".container__aside");
-let input = document.querySelector(".head__serch-value");
-const form = document.querySelector("form");
-const URL = "https://api.pokemontcg.io/v1/cards?page=2&pageSize=4";
-let pokemons = null;
-const pokemonsName = [];
+class App {
+  constructor() {
+    this.loadBtn = document.querySelector(".container__btn");
+    this.loadBtn.addEventListener("click", this.loadData);
+    this.divScreen = document.querySelector(".container__screen");
+    this.divSection = document.querySelector(".section");
+    this.aside = document.querySelector(".container__aside");
+    this.input = document.querySelector(".head__serch-value");
+    this.input.addEventListener("input", this.serchValue);
+    this.form = document.querySelector("form");
+    this.URL = "https://api.pokemontcg.io/v1/cards?page=2&pageSize=4";
+    this.pokemons = null;
+    this.pokemonsName = [];
+    this.takeData();
+  }
+  //AJAX//
+  takeData = () => {
+    fetch(this.URL)
+      .then((res) => {
+        if (res.status !== 200) {
+          throw Error("I's not 200 response!");
+        } else {
+          return res.json();
+        }
+      })
+      .then((json) => (this.pokemons = json.cards))
+      .catch((err) => console.log(err));
+  };
 
-fetch(URL)
-  .then((res) => {
-    if (res.status !== 200) {
-      throw Error("I's not 200 response!");
-    } else {
-      return res.json();
-    }
-  })
+  //LOADER//
+  showScreen = () => {
+    this.divScreen.classList.add("active");
+  };
+  removeScreen = () => {
+    this.divScreen.classList.remove("active");
+  };
 
-  .then((json) => (pokemons = json.cards))
-  .catch((err) => console.log(err));
-
-showScreen = () => {
-  divScreen.classList.add("active");
-};
-removeScreen = () => {
-  divScreen.classList.remove("active");
-};
-
-showData = () => {
-  aside;
-  pokemons.forEach((pokemon) => {
-    const divInfo = document.createElement("div");
-    divInfo.classList.add("section__info");
-    const h3 = document.createElement("h3");
-    divInfo.appendChild(h3);
-    h3.textContent = `${pokemon.name}`;
-    const img = document.createElement("img");
-    divInfo.appendChild(img);
-    img.src = `${pokemon.imageUrl}`;
-    const p = document.createElement("p");
-    divInfo.appendChild(p);
-    p.textContent = `Rarity: ${pokemon.rarity}`;
-    divSection.appendChild(divInfo);
-    pokemonsName.push({
-      name: pokemon.name,
-      img: pokemon.imageUrl,
-      rarity: pokemon.rarity,
-    });
-  });
-};
-loadData = () => {
-  showScreen();
-  setTimeout(removeScreen, 2000);
-  setTimeout(showData, 2000);
-  console.log(pokemonsName);
-};
-serchValue = (e) => {
-  pokemonsName.filter((pokemon) => {
-    if (e.target.value === pokemon.name) {
+  //SHOW POKEMON CARDS//
+  showData = () => {
+    this.pokemons.forEach((pokemon) => {
       const divInfo = document.createElement("div");
       divInfo.classList.add("section__info");
       const h3 = document.createElement("h3");
@@ -65,14 +45,45 @@ serchValue = (e) => {
       h3.textContent = `${pokemon.name}`;
       const img = document.createElement("img");
       divInfo.appendChild(img);
-      img.src = `${pokemon.img}`;
+      img.src = `${pokemon.imageUrl}`;
       const p = document.createElement("p");
       divInfo.appendChild(p);
       p.textContent = `Rarity: ${pokemon.rarity}`;
-      aside.appendChild(divInfo);
-    }
-  });
-};
+      this.divSection.appendChild(divInfo);
+      this.pokemonsName.push({
+        name: pokemon.name,
+        img: pokemon.imageUrl,
+        rarity: pokemon.rarity,
+      });
+    });
+  };
 
-loadBtn.addEventListener("click", loadData);
-input.addEventListener("input", serchValue);
+  //CLICK BUTTON//
+  loadData = () => {
+    this.showScreen();
+    setTimeout(this.removeScreen, 2000);
+    setTimeout(this.showData, 2000);
+  };
+
+  //INPUT VALUE//
+  serchValue = (e) => {
+    this.pokemonsName.filter((pokemon) => {
+      if (e.target.value === pokemon.name) {
+        const divInfo = document.createElement("div");
+        divInfo.classList.add("section__info");
+        const h3 = document.createElement("h3");
+        divInfo.appendChild(h3);
+        h3.textContent = `${pokemon.name}`;
+        const img = document.createElement("img");
+        divInfo.appendChild(img);
+        img.src = `${pokemon.img}`;
+        const p = document.createElement("p");
+        divInfo.appendChild(p);
+        p.textContent = `Rarity: ${pokemon.rarity}`;
+        this.aside.appendChild(divInfo);
+      }
+    });
+  };
+}
+
+const app = new App();
