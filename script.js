@@ -9,15 +9,15 @@ class App {
     this.input.addEventListener("search", this.serchValue);
     this.form = document.querySelector("form");
     this.divSerch = document.createElement("div");
-
-    this.URL = "https://api.pokemontcg.io/v1/cards?page=2&pageSize=4";
-
     this.pokemons = null;
     this.pokemonsName = [];
-    this.takeData();
+    this.page = null;
   }
+
   //AJAX//
   takeData = () => {
+    this.page++;
+    this.URL = `https://api.pokemontcg.io/v1/cards?page=${this.page}&pageSize=4`;
     fetch(this.URL)
       .then((res) => {
         if (res.status !== 200) {
@@ -27,6 +27,7 @@ class App {
         }
       })
       .then((json) => (this.pokemons = json.cards))
+
       .catch((err) => console.log(err));
   };
 
@@ -63,9 +64,11 @@ class App {
 
   //CLICK BUTTON//
   loadData = () => {
+    this.takeData();
     this.showScreen();
     setTimeout(this.removeScreen, 2000);
     setTimeout(this.showData, 2000);
+
     this.aside.removeChild(this.divSerch);
   };
 
@@ -84,9 +87,9 @@ class App {
         this.divSerch.appendChild(p);
         p.textContent = `Rarity: ${pokemon.rarity}`;
         this.aside.appendChild(this.divSerch);
+        e.target.value = "";
       }
     });
-    return divSerch;
   };
 }
 
