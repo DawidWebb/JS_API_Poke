@@ -86,6 +86,8 @@ class App {
     this.pokemonsName.filter((pokemon) => {
       if (e.target.value === pokemon.name) {
         this.active = true;
+        this.aside.removeChild(this.divSerch);
+        this.divSerch = null;
         this.checked.push(1);
         this.divSerch = document.createElement("div");
         this.divSerch.classList.add("section__info");
