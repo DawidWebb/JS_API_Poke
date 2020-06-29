@@ -8,10 +8,12 @@ class App {
     this.input = document.querySelector(".head__serch-value");
     this.input.addEventListener("search", this.serchValue);
     this.form = document.querySelector("form");
-    this.divSerch = document.createElement("div");
+    this.divSerch;
     this.pokemons = null;
     this.pokemonsName = [];
     this.page = null;
+    this.active = false;
+    this.checked = [];
   }
 
   //AJAX//
@@ -68,14 +70,24 @@ class App {
     this.showScreen();
     setTimeout(this.removeScreen, 2000);
     setTimeout(this.showData, 2000);
+    if (this.checked.length > 0) {
+      this.aside.removeChild(this.divSerch);
+      this.divSerch = null;
+      this.checked = [];
+    }
+    this.active = false;
 
-    this.aside.removeChild(this.divSerch);
+    console.log(this.pokemonsName);
   };
 
   //INPUT VALUE//
+
   serchValue = (e) => {
     this.pokemonsName.filter((pokemon) => {
       if (e.target.value === pokemon.name) {
+        this.active = true;
+        this.checked.push(1);
+        this.divSerch = document.createElement("div");
         this.divSerch.classList.add("section__info");
         const h3 = document.createElement("h3");
         this.divSerch.appendChild(h3);
@@ -90,7 +102,21 @@ class App {
         e.target.value = "";
       }
     });
+
+    if (this.active === false) {
+      this.showInfo(e);
+    }
+  };
+  showInfo = (e) => {
+    this.checked.push(1);
+    this.divSerch = document.createElement("div");
+    this.divSerch.classList.add("section__info");
+    const h3 = document.createElement("h3");
+    h3.textContent = "Nie ma takiego pokemona w twojej bazie.";
+    h3.style.color = "brown";
+    this.divSerch.appendChild(h3);
+    this.aside.appendChild(this.divSerch);
+    e.target.value = "";
   };
 }
-
 const app = new App();
